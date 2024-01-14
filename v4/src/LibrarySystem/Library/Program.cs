@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.IO;
 
-namespace Library
+namespace LibrarySystem
 {
     public class Program
     {
