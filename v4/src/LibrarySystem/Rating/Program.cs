@@ -1,47 +1,58 @@
-using Rating;
-using Rating.Interfaces;
-using Rating.Services;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using System.Reflection;
-using Rating.Repositories;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.IO;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddHealthChecks();
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-
-
-builder.Services.AddDbContext<RatingDbContext>(opt =>
+namespace Rating
 {
-    var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
-    var connectionString = config.GetConnectionString("DefaultConnection");
-    opt.UseNpgsql(connectionString, opts => opts.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null));
-});
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            CreateHostBuilder(args).Build().Run();
+        }
 
-builder.Services.AddScoped<IRatingRepository, RatingRepository>();
-builder.Services.AddScoped<IRatingService, RatingService>();
-builder.Services.AddCors();
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.ConfigureServices((context, services) =>
+                    {
+                        // Добавление сервисов в контейнер.
+                        services.AddHealthChecks();
+                        services.AddControllers();
+                        services.AddEndpointsApiExplorer();
 
+                        services.AddDbContext<RatingDbContext>(opt =>
+                        {
+                            var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
+                            var connectionString = config.GetConnectionString("DefaultConnection");
+                            opt.UseNpgsql(connectionString, opts => opts.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null));
+                        });
 
+                        services.AddScoped<IRatingRepository, RatingRepository>();
+                        services.AddScoped<IRatingService, RatingService>();
+                        services.AddCors();
+                    })
+                    .Configure((context, app) =>
+                    {
+                        // Конфигурация конвейера HTTP-запросов.
+                        app.UseCors(builder => builder
+                            .AllowAnyOrigin()
+                            .AllowAnyMethod()
+                            .AllowAnyHeader()
+                            .WithExposedHeaders("X-Total-Count")
+                            .WithExposedHeaders(""));
 
-var app = builder.Build();
+                        app.UseHsts();
 
-app.UseCors(builder => builder
-                .AllowAnyOrigin()
-                .AllowAnyMethod()
-                .AllowAnyHeader()
-                .WithExposedHeaders("X-Total-Count")
-                .WithExposedHeaders(""));
+                        app.UseRouting();
 
-app.UseHsts();
-
-app.UseRouting();
-
-app.MapControllers();
-app.MapHealthChecks("/manage/health");
-
-app.Run();
+                        app.MapControllers();
+                        app.MapHealthChecks("/manage/health");
+                    });
+                });
+    }
+}
