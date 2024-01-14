@@ -15,7 +15,7 @@ services:
         networks:
             - internal
 
-    gateway:
+    librarysystem:
         build:
             dockerfile: ./v4/src/LibrarySystem/LibrarySystem/Dockerfile
         container_name: librarysystem
@@ -34,7 +34,7 @@ services:
         networks:
             - internal
 
-    flight:
+    library:
         build:
             dockerfile: ./v4/src/LibrarySystem/Library/Dockerfile
         container_name: library    
@@ -48,7 +48,7 @@ services:
         networks:
             - internal
 
-    ticket:
+    reservation:
         build:
             dockerfile: ./v4/src/LibrarySystem/Reservation/Dockerfile
         container_name: reservation
@@ -62,7 +62,7 @@ services:
         networks:
             - internal
 
-    bonus:
+    rating:
         build:
             dockerfile: ./v4/src/LibrarySystem/Rating/Dockerfile
         container_name: rating
