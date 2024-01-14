@@ -6,7 +6,7 @@ EXPOSE 8070
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Reservation.csproj", "Reservation/"]
+COPY ["./v4/src/LibrarySystem/Reservation/Reservation.csproj", "Reservation/"]
 RUN dotnet restore "Reservation/Reservation.csproj"
 
 WORKDIR "/src/Reservation"
