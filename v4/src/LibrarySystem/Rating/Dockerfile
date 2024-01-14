@@ -6,7 +6,7 @@ EXPOSE 8050
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Rating.csproj", "Rating/"]
+COPY ["Rating.csproj", "./v4/src/LibrarySystem/Rating/"]
 RUN dotnet restore "Rating/Rating.csproj"
 
 WORKDIR "/src/Rating"
