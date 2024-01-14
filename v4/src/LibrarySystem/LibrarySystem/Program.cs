@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace LibrarySystem
 {
-    public class Program
+    public class Program2
     {
         public static void Main(string[] args)
         {

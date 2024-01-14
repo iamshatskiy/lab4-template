@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Reservation
 {
-    public class Program
+    public class Program4
     {
         public static void Main(string[] args)
         {

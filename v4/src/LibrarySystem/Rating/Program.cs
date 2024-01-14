@@ -7,7 +7,7 @@ using System.IO;
 
 namespace Rating
 {
-    public class Program
+    public class Program3
     {
         public static void Main(string[] args)
         {
