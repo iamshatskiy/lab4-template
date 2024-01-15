@@ -13,7 +13,7 @@ namespace Reservation
 {
     public class Program4
     {
-        public static void Main(string[] args)
+        public static void Program4Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }

@@ -13,7 +13,7 @@ namespace Rating
 {
     public class Program3
     {
-        public static void Main(string[] args)
+        public static void Program3Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }

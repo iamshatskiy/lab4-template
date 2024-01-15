@@ -15,7 +15,7 @@ namespace LibrarySystem
 {
     public class Program1
     {
-        public static void Main(string[] args)
+        public static void Program1Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }
