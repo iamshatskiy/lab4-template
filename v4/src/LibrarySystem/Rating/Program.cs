@@ -2,8 +2,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.IO;
+using Rating.Interfaces;
+using Rating.Repositories;
+using Rating.Services;
 
 namespace Rating
 {
@@ -50,8 +54,11 @@ namespace Rating
 
                         app.UseRouting();
 
-                        app.MapControllers();
-                        app.MapHealthChecks("/manage/health");
+                        app.UseEndpoints(endpoints =>
+                        {
+                            endpoints.MapControllers();
+                            endpoints.MapHealthChecks("/manage/health");
+                        });
                     });
                 });
     }

@@ -4,6 +4,10 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
+using Microsoft.EntityFrameworkCore;
+using Reservation.Interfaces;
+using Reservation.Repositories;
+using Reservation.Services;
 
 namespace Reservation
 {
@@ -50,8 +54,11 @@ namespace Reservation
 
                         app.UseRouting();
 
-                        app.MapControllers();
-                        app.MapHealthChecks("/manage/health");
+                        app.UseEndpoints(endpoints =>
+                        {
+                            endpoints.MapControllers();
+                            endpoints.MapHealthChecks("/manage/health");
+                        });
                     });
                 });
     }
