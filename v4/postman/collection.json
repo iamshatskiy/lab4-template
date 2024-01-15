@@ -45,7 +45,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}api/v1/libraries?page=1&size=10&city=Москва",
+							"raw": "{{baseUrl}}/api/v1/libraries?page=1&size=10&city=Москва",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -78,7 +78,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}api/v1/libraries?page=1&size=10&city=Москва",
+									"raw": "{{baseUrl}}/api/v1/libraries?page=1&size=10&city=Москва",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -154,7 +154,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}api/v1/libraries/:libraryUid/books?page=1&size=25&showAll=false",
+							"raw": "{{baseUrl}}/api/v1/libraries/:libraryUid/books?page=1&size=25&showAll=false",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -195,7 +195,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{baseUrl}}api/v1/libraries/:libraryUid/books?page=1&size=25&showAll=true",
+									"raw": "{{baseUrl}}/api/v1/libraries/:libraryUid/books?page=1&size=25&showAll=true",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -272,7 +272,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}api/v1/rating",
+							"raw": "{{baseUrl}}/api/v1/rating",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -296,7 +296,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}api/v1/rating",
+									"raw": "{{baseUrl}}/api/v1/rating",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -381,7 +381,7 @@
 							"raw": "{\n    \"bookUid\": \"{{bookUid}}\",\n    \"libraryUid\": \"{{libraryUid}}\",\n    \"tillDate\": \"2021-10-11\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}api/v1/reservations",
+							"raw": "{{baseUrl}}/api/v1/reservations",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -420,7 +420,7 @@
 									}
 								},
 								"url": {
-									"raw": "{{baseUrl}}api/v1/reservations",
+									"raw": "{{baseUrl}}/api/v1/reservations",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -494,7 +494,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}api/v1/reservations",
+							"raw": "{{baseUrl}}/api/v1/reservations",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -518,7 +518,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}api/v1/reservations",
+									"raw": "{{baseUrl}}/api/v1/reservations",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -576,7 +576,7 @@
 							"raw": "{\n    \"condition\": \"EXCELLENT\",\n    \"date\": \"2021-10-11\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}api/v1/reservations/:reservationUid/return",
+							"raw": "{{baseUrl}}/api/v1/reservations/:reservationUid/return",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -613,7 +613,7 @@
 									"raw": "{\n    \"condition\": \"EXCELLENT\",\n    \"date\": \"2021-10-11\"\n}"
 								},
 								"url": {
-									"raw": "{{baseUrl}}api/v1/reservations/:reservationUid/return",
+									"raw": "{{baseUrl}}/api/v1/reservations/:reservationUid/return",
 									"host": [
 										"{{baseUrl}}"
 									],
@@ -676,7 +676,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}api/v1/rating",
+							"raw": "{{baseUrl}}/api/v1/rating",
 							"host": [
 								"{{baseUrl}}"
 							],
@@ -700,7 +700,7 @@
 									}
 								],
 								"url": {
-									"raw": "{{baseUrl}}api/v1/rating",
+									"raw": "{{baseUrl}}/api/v1/rating",
 									"host": [
 										"{{baseUrl}}"
 									],
