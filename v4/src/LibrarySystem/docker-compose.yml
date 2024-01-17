@@ -23,7 +23,7 @@ services:
       retries: 5
 
   librarysystem:
-    image: ${DOCKER_REGISTRY-}librarysystem
+    image: librarysystem
     container_name: librarysystem
     build:
       context: ./LibrarySystem
@@ -42,9 +42,18 @@ services:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/manage/health"]
       interval: 5s
       timeout: 10s
+    environment:
+        SERVICE_HOST: librarysystem
+        SERVICE_PORT: 8080
+        LIBRARY_SERVICE_HOST: library
+        LIBRARY_SERVICE_PORT: 8060
+        RESERVATION_SERVICE_HOST: reservation
+        RESERVATION_SERVICE_PORT: 8070
+        RATING_SERVICE_HOST: rating
+        RATING_SERVICE_PORT: 8050
 
   reservation:
-    image: ${DOCKER_REGISTRY-}reservation
+    image: reservation
     container_name: reservation
     build:
       context: ./Reservation
@@ -61,9 +70,13 @@ services:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8070/manage/health"]
       interval: 5s
       timeout: 10s
+    environment:
+        SERVICE_HOST: reservation
+        SERVICE_PORT: 8070
+        DB_HOST: postgres
 
   library:
-    image: ${DOCKER_REGISTRY-}library
+    image: library
     container_name: library
     build:
       context: ./Library
@@ -80,9 +93,13 @@ services:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8060/manage/health"]
       interval: 5s
       timeout: 10s
+    environment:
+        SERVICE_HOST: library
+        SERVICE_PORT: 8060
+        DB_HOST: postgres
 
   rating:
-    image: ${DOCKER_REGISTRY-}rating
+    image: rating
     container_name: rating
     build:
       context: ./Rating
@@ -99,6 +116,10 @@ services:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8050/manage/health"]
       interval: 5s
       timeout: 10s
+    environment:
+        SERVICE_HOST: rating
+        SERVICE_PORT: 8050
+        DB_HOST: postgres
 
 volumes:
   db-data:

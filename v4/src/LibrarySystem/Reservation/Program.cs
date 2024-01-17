@@ -1,65 +1,45 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.IO;
 using Microsoft.EntityFrameworkCore;
+using Reservation;
 using Reservation.Interfaces;
 using Reservation.Repositories;
 using Reservation.Services;
+using System.Reflection;
 
-namespace Reservation
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+
+builder.Services.AddHealthChecks();
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddDbContext<ReservationDbContext>(opt =>
 {
-    public class Program4
-    {
-        public static void Program4Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+    var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
+    var connectionString = config.GetConnectionString("DefaultConnection");
+    opt.UseNpgsql(connectionString, opts => opts.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null));
+});
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.ConfigureServices((context, services) =>
-                    {
-                        // Добавление сервисов в контейнер.
-                        services.AddHealthChecks();
-                        services.AddControllers();
-                        services.AddEndpointsApiExplorer();
+builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+builder.Services.AddScoped<IReservationService, ReservationService>();
+builder.Services.AddCors();
 
-                        services.AddDbContext<ReservationDbContext>(opt =>
-                        {
-                            var config = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory()).AddJsonFile("appsettings.json").Build();
-                            var connectionString = config.GetConnectionString("DefaultConnection");
-                            opt.UseNpgsql(connectionString, opts => opts.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null));
-                        });
 
-                        services.AddScoped<IReservationRepository, ReservationRepository>();
-                        services.AddScoped<IReservationService, ReservationService>();
-                        services.AddCors();
-                    })
-                    .Configure((context, app) =>
-                    {
-                        // Конфигурация конвейера HTTP-запросов.
-                        app.UseCors(builder => builder
-                            .AllowAnyOrigin()
-                            .AllowAnyMethod()
-                            .AllowAnyHeader()
-                            .WithExposedHeaders("X-Total-Count")
-                            .WithExposedHeaders(""));
 
-                        app.UseHsts();
+var app = builder.Build();
 
-                        app.UseRouting();
+app.UseCors(builder => builder
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .WithExposedHeaders("X-Total-Count")
+                .WithExposedHeaders(""));
 
-                        app.UseEndpoints(endpoints =>
-                        {
-                            endpoints.MapControllers();
-                            endpoints.MapHealthChecks("/manage/health");
-                        });
-                    });
-                });
-    }
-}
+app.UseHsts();
+
+app.UseRouting();
+
+app.MapControllers();
+app.MapHealthChecks("/manage/health");
+
+app.Run();
