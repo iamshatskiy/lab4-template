@@ -7,7 +7,7 @@ services:
     restart: on-failure
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_PASSWORD: program_password
       POSTGRES_DB: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
