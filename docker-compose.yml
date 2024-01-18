@@ -1,0 +1,133 @@
+version: '3.4'
+
+services:
+  postgres:
+    image: library/postgres:13
+    container_name: postgres
+    restart: on-failure
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: program_password
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./postgres/:/docker-entrypoint-initdb.d/
+    ports:
+      - "5432:5432"
+    networks:
+      - db-local
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -d $$POSTGRES_DB -U $$POSTGRES_USER"]
+      interval: 10s
+      timeout: 15s
+      retries: 7
+
+  librarysystem:
+    image: librarysystem
+    container_name: librarysystem
+    build:
+      context: ./v4/src/LibrarySystem/LibrarySystem
+      dockerfile: Dockerfile
+    depends_on:
+      - reservation
+      - library
+      - rating
+    networks:
+      - reservation-local
+      - library-local
+      - rating-local
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/manage/health"]
+      interval: 5s
+      timeout: 10s
+    environment:
+        SERVICE_HOST: librarysystem
+        SERVICE_PORT: 8080
+        LIBRARY_SERVICE_HOST: library
+        LIBRARY_SERVICE_PORT: 8060
+        RESERVATION_SERVICE_HOST: reservation
+        RESERVATION_SERVICE_PORT: 8070
+        RATING_SERVICE_HOST: rating
+        RATING_SERVICE_PORT: 8050
+  
+
+  reservation:
+    image: reservation
+    container_name: reservation
+    build:
+      context: ./v4/src/LibrarySystem/Reservation
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - reservation-local
+      - db-local
+    ports:
+      - "8070:8070"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8070/manage/health"]
+      interval: 5s
+      timeout: 10s
+    environment:
+        SERVICE_HOST: reservation
+        SERVICE_PORT: 8070
+        DB_HOST: postgres
+
+  library:
+    image: library
+    container_name: library
+    build:
+      context: ./v4/src/LibrarySystem/Library
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - library-local
+      - db-local
+    ports:
+      - "8060:8060"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8060/manage/health"]
+      interval: 5s
+      timeout: 10s
+    environment:
+        SERVICE_HOST: library
+        SERVICE_PORT: 8060
+        DB_HOST: postgres
+
+  rating:
+    image: rating
+    container_name: rating
+    build:
+      context: ./v4/src/LibrarySystem/Rating
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - rating-local
+      - db-local
+    ports:
+      - "8050:8050"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8050/manage/health"]
+      interval: 5s
+      timeout: 10s
+    environment:
+        SERVICE_HOST: rating
+        SERVICE_PORT: 8050
+        DB_HOST: postgres
+
+volumes:
+  db-data:
+
+networks:
+  reservation-local:
+  library-local:
+  rating-local:
+  db-local:
+    driver: bridge
