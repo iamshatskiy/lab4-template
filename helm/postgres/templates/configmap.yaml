@@ -22,7 +22,7 @@ data:
             CHECK (status IN ('RENTED', 'RETURNED', 'EXPIRED')),
         start_date      TIMESTAMP   NOT NULL,
         till_date       TIMESTAMP   NOT NULL
-    )
+    );
 
     GRANT ALL PRIVILEGES ON TABLE reservation TO program;
     GRANT ALL PRIVILEGES ON SEQUENCE reservation_id_seq TO program;
